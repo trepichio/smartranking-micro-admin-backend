@@ -1,9 +1,28 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './filters/http-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Main');
+  const {
+    BROKER_USER,
+    BROKER_PASSWORD,
+    BROKER_IP,
+    BROKER_PORT,
+    BROKER_VIRTUAL_HOST,
+  } = process.env;
+
+  const app = await NestFactory.createMicroservice(AppModule, {
+    transport: Transport.RMQ,
+    options: {
+      urls: [
+        `amqp://${BROKER_USER}:${BROKER_PASSWORD}@${BROKER_IP}:${BROKER_PORT}/${BROKER_VIRTUAL_HOST}`,
+      ],
+      queue: 'admin-backend',
+    },
+  });
 
   app.useGlobalFilters(new AllExceptionsFilter());
 
@@ -19,6 +38,6 @@ async function bootstrap() {
     });
   };
 
-  await app.listen(8080);
+  await app.listen(() => logger.log('Microservices is listening'));
 }
 bootstrap();
