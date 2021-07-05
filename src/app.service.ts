@@ -22,4 +22,22 @@ export class AppService {
       throw new RpcException(error.message);
     }
   }
+
+  async getAllCategories() {
+    try {
+      return await this.categoryModel.find().exec();
+    } catch (error) {
+      this.logger.error(`error: ${JSON.stringify(error.message)}`);
+      throw new RpcException(error.message);
+    }
+  }
+
+  async getCategoryById(_id: string) {
+    try {
+      return await this.categoryModel.findOne({ _id }).exec();
+    } catch (error) {
+      this.logger.error(`error: ${JSON.stringify(error.message)}`);
+      throw new RpcException(error.message);
+    }
+  }
 }
