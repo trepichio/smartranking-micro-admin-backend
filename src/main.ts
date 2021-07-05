@@ -38,6 +38,6 @@ async function bootstrap() {
     });
   };
 
-  await app.listen(() => logger.log('Microservices is listening'));
+  app.listen(() => logger.log('Microservices is listening'));
 }
 bootstrap();
