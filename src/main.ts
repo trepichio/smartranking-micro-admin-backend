@@ -21,6 +21,7 @@ async function bootstrap() {
         `amqp://${BROKER_USER}:${BROKER_PASSWORD}@${BROKER_IP}:${BROKER_PORT}/${BROKER_VIRTUAL_HOST}`,
       ],
       queue: 'admin-backend',
+      noAck: false,
     },
   });
 
