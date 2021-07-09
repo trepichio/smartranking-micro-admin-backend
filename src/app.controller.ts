@@ -31,16 +31,28 @@ export class AppController {
       await this.appService.createCategory(category);
       await channel.ack(originalMessage);
     } catch (error) {
-      ackErrors.map(async (err) => (error.message.includes(err) && (await channel.ack(originalMessage))))
+      ackErrors.map(
+        async (err) =>
+          error.message.includes(err) && (await channel.ack(originalMessage)),
+      );
     }
   }
 
   @MessagePattern('get-categories')
-  async getCategories(@Payload() _id: string) {
-    if (!_id) {
-      return await this.appService.getAllCategories();
-    } else {
-      return await this.appService.getCategoryById(_id);
+  async getCategories(@Payload() _id: string, @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+
+    try {
+      if (!_id) {
+        this.logger.log('get all categories');
+        return await this.appService.getAllCategories();
+      } else {
+        this.logger.log(`Get categories for _id: ${_id}`);
+        return await this.appService.getCategoryById(_id);
+      }
+    } finally {
+      channel.ack(originalMessage);
     }
   }
 }
