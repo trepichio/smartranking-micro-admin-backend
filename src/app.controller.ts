@@ -55,4 +55,26 @@ export class AppController {
       channel.ack(originalMessage);
     }
   }
+
+  @EventPattern('update-category')
+  async updateCategory(
+    @Payload() { id, dto }: { id: string; dto: CategoryInterface },
+    @Ctx() context: RmqContext,
+  ) {
+    this.logger.log(`Update Category: ${JSON.stringify(dto)}`);
+
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+
+    try {
+      await this.appService.updateCategory(dto, id);
+      await channel.ack(originalMessage);
+    } catch (error) {
+      ackErrors.map(
+        async (err) =>
+          error.message.includes(err) && (await channel.ack(originalMessage)),
+      );
+    }
+  }
+
 }

@@ -40,4 +40,19 @@ export class AppService {
       throw new RpcException(error.message);
     }
   }
+
+  async updateCategory(
+    dto: CategoryInterface,
+    _id: string,
+  ): Promise<CategoryInterface> {
+    try {
+      const categoryUpdated = await this.categoryModel
+        .findOneAndUpdate({ _id }, dto)
+        .exec();
+      return categoryUpdated;
+    } catch (error) {
+      this.logger.error(`error: ${JSON.stringify(error.message)}`);
+      throw new RpcException(error.message);
+    }
+  }
 }
