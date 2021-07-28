@@ -77,4 +77,24 @@ export class AppController {
     }
   }
 
+  @EventPattern('delete-category')
+  async deleteCategory(
+    @Payload() { id }: { id: string },
+    @Ctx() context: RmqContext,
+  ) {
+    this.logger.log(`Delete Category: ${id}`);
+
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+
+    try {
+      await this.appService.deleteCategory(id);
+      await channel.ack(originalMessage);
+    } catch (error) {
+      ackErrors.map(
+        async (err) =>
+          error.message.includes(err) && (await channel.ack(originalMessage)),
+      );
+    }
+  }
 }

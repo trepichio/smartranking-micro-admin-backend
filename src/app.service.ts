@@ -55,4 +55,13 @@ export class AppService {
       throw new RpcException(error.message);
     }
   }
+
+  async deleteCategory(_id: string): Promise<void> {
+    try {
+      await this.categoryModel.findOneAndRemove({ _id }).exec();
+    } catch (error) {
+      this.logger.error(`error: ${JSON.stringify(error.message)}`);
+      throw new RpcException(error.message);
+    }
+  }
 }
