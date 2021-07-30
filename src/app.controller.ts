@@ -31,10 +31,11 @@ export class AppController {
       await this.appService.createCategory(category);
       await channel.ack(originalMessage);
     } catch (error) {
-      ackErrors.map(
-        async (err) =>
-          error.message.includes(err) && (await channel.ack(originalMessage)),
-      );
+      this.logger.error(error.message);
+
+      if (ackErrors.some((err) => error.message.includes(err))) {
+        await channel.ack(originalMessage)
+      }
     }
   }
 
@@ -70,10 +71,11 @@ export class AppController {
       await this.appService.updateCategory(dto, id);
       await channel.ack(originalMessage);
     } catch (error) {
-      ackErrors.map(
-        async (err) =>
-          error.message.includes(err) && (await channel.ack(originalMessage)),
-      );
+      this.logger.error(error.message);
+
+      if (ackErrors.some((err) => error.message.includes(err))) {
+        await channel.ack(originalMessage);
+      }
     }
   }
 
@@ -91,10 +93,11 @@ export class AppController {
       await this.appService.deleteCategory(id);
       await channel.ack(originalMessage);
     } catch (error) {
-      ackErrors.map(
-        async (err) =>
-          error.message.includes(err) && (await channel.ack(originalMessage)),
-      );
+      this.logger.error(error.message);
+
+      if (ackErrors.some((err) => error.message.includes(err))) {
+        await channel.ack(originalMessage);
+      }
     }
   }
 }
