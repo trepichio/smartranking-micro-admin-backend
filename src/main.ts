@@ -2,7 +2,6 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './filters/http-exception.filter';
 
 async function bootstrap() {
   const logger = new Logger('Main');
@@ -24,8 +23,6 @@ async function bootstrap() {
       noAck: false,
     },
   });
-
-  app.useGlobalFilters(new AllExceptionsFilter());
 
   /**
    * Overwrites toJSON method of Date Object in order to print it
