@@ -7,4 +7,5 @@ export interface PlayerInterface extends Document {
   ranking: string;
   rankingPosition: number;
   urlProfilePicture: string;
+  category: string;
 }

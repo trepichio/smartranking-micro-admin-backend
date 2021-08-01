@@ -21,6 +21,10 @@ export const PlayerSchema = new mongoose.Schema(
     urlProfilePicture: {
       type: String,
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+    },
   },
   {
     timestamps: true,
