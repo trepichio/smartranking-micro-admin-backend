@@ -4,8 +4,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './config/database';
+import { CategorySchema } from './categories/interfaces/category.schema';
 import { CategorySchema } from './interfaces/categories/category.schema';
 import { PlayerSchema } from './interfaces/players/player.schema';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -13,6 +15,7 @@ import { PlayerSchema } from './interfaces/players/player.schema';
     MongooseModule.forRoot(process.env.DATABASE_URL, config),
     MongooseModule.forFeature([{ name: 'Category', schema: CategorySchema }]),
     MongooseModule.forFeature([{ name: 'Player', schema: PlayerSchema }]),
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
