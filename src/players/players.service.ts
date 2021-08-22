@@ -105,7 +105,7 @@ export class PlayersService {
   }
 
   private async listPlayers(): Promise<PlayerInterface[]> {
-    return await this.playerModel.find().populate('category').exec();
+    return await this.playerModel.find().exec();
   }
 
   private async findOne(query): Promise<PlayerInterface> {
@@ -124,7 +124,6 @@ export class PlayersService {
   private async findOneById(id): Promise<PlayerInterface> {
     const player = await await this.playerModel
       .findById(id)
-      .populate('category')
       .exec();
 
     if (!player) {
