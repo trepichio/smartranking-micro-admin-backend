@@ -2,18 +2,18 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CategoryInterface } from './interfaces/category.interface';
+import { ICategory } from './interfaces/category.interface';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectModel('Category')
-    private readonly categoryModel: Model<CategoryInterface>,
+    private readonly categoryModel: Model<ICategory>,
   ) {}
 
   private readonly logger = new Logger(CategoriesService.name);
 
-  async createCategory(dto: CategoryInterface): Promise<CategoryInterface> {
+  async createCategory(dto: ICategory): Promise<ICategory> {
     try {
       const categoryCreated = new this.categoryModel(dto);
       return await categoryCreated.save();
@@ -41,10 +41,7 @@ export class CategoriesService {
     }
   }
 
-  async updateCategory(
-    dto: CategoryInterface,
-    _id: string,
-  ): Promise<CategoryInterface> {
+  async updateCategory(dto: ICategory, _id: string): Promise<ICategory> {
     try {
       const categoryUpdated = await this.categoryModel
         .findOneAndUpdate({ _id }, dto)

@@ -12,7 +12,7 @@ import {
   Payload,
   RmqContext,
 } from '@nestjs/microservices';
-import { PlayerInterface } from 'src/players/interfaces/player.interface';
+import { IPlayer } from 'src/players/interfaces/player.interface';
 import { PlayersService } from './players.service';
 
 const ackErrors: string[] = ['E1100', '_E404'];
@@ -24,10 +24,7 @@ export class PlayersController {
   private readonly logger = new Logger(PlayersController.name);
 
   @EventPattern('create-player')
-  async createPlayer(
-    @Payload() player: PlayerInterface,
-    @Ctx() context: RmqContext,
-  ) {
+  async createPlayer(@Payload() player: IPlayer, @Ctx() context: RmqContext) {
     this.logger.log(`createPlayer ${JSON.stringify(player.name)}`);
 
     const channel = context.getChannelRef();
@@ -48,7 +45,7 @@ export class PlayersController {
   @EventPattern('update-player')
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async updatePlayer(
-    @Payload() { id, dto }: { id: string; dto: PlayerInterface },
+    @Payload() { id, dto }: { id: string; dto: IPlayer },
     @Ctx() context: RmqContext,
   ) {
     this.logger.log(`updatePlayer ${JSON.stringify(id)}`);

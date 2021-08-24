@@ -7,18 +7,18 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PlayerInterface } from './interfaces/player.interface';
+import { IPlayer } from './interfaces/player.interface';
 import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class PlayersService {
   constructor(
-    @InjectModel('Player') private readonly playerModel: Model<PlayerInterface>,
+    @InjectModel('Player') private readonly playerModel: Model<IPlayer>,
   ) {}
 
   private readonly logger = new Logger(PlayersService.name);
 
-  async createPlayer(dto: PlayerInterface): Promise<PlayerInterface> {
+  async createPlayer(dto: IPlayer): Promise<IPlayer> {
     try {
       const { email } = dto;
 
@@ -36,10 +36,7 @@ export class PlayersService {
     }
   }
 
-  async updatePlayer(
-    id: string,
-    dto: PlayerInterface,
-  ): Promise<PlayerInterface> {
+  async updatePlayer(id: string, dto: IPlayer): Promise<IPlayer> {
     try {
       const playerFound = await this.playerModel.findById(id).exec();
 
@@ -55,7 +52,7 @@ export class PlayersService {
     }
   }
 
-  async getAllPlayers(): Promise<PlayerInterface[]> {
+  async getAllPlayers(): Promise<IPlayer[]> {
     try {
       return await this.listPlayers();
     } catch (error) {
@@ -64,7 +61,7 @@ export class PlayersService {
     }
   }
 
-  async getPlayer(email: string): Promise<PlayerInterface> {
+  async getPlayer(email: string): Promise<IPlayer> {
     try {
       return await this.findOne({ email });
     } catch (err) {
@@ -73,7 +70,7 @@ export class PlayersService {
     }
   }
 
-  async getPlayerById(id: string): Promise<PlayerInterface> {
+  async getPlayerById(id: string): Promise<IPlayer> {
     try {
       return await this.findOneById(id);
     } catch (err) {
@@ -91,24 +88,21 @@ export class PlayersService {
     }
   }
 
-  private async create(dto: PlayerInterface): Promise<PlayerInterface> {
+  private async create(dto: IPlayer): Promise<IPlayer> {
     const createdPlayer = new this.playerModel(dto);
 
     return await createdPlayer.save();
   }
 
-  private async update(
-    id: string,
-    dto: PlayerInterface,
-  ): Promise<PlayerInterface> {
+  private async update(id: string, dto: IPlayer): Promise<IPlayer> {
     return await this.playerModel.findByIdAndUpdate(id, { $set: dto }).exec();
   }
 
-  private async listPlayers(): Promise<PlayerInterface[]> {
+  private async listPlayers(): Promise<IPlayer[]> {
     return await this.playerModel.find().exec();
   }
 
-  private async findOne(query): Promise<PlayerInterface> {
+  private async findOne(query): Promise<IPlayer> {
     const player = await this.playerModel
       .findOne({ email: query.email })
       .exec();
@@ -121,10 +115,8 @@ export class PlayersService {
     return player;
   }
 
-  private async findOneById(id): Promise<PlayerInterface> {
-    const player = await await this.playerModel
-      .findById(id)
-      .exec();
+  private async findOneById(id): Promise<IPlayer> {
+    const player = await await this.playerModel.findById(id).exec();
 
     if (!player) {
       throw new Error(`_E404: Player with id ${id} not found`);
@@ -134,7 +126,7 @@ export class PlayersService {
     return player;
   }
 
-  private async deleteOne(query): Promise<PlayerInterface> {
+  private async deleteOne(query): Promise<IPlayer> {
     const { id } = query;
 
     const deletedPlayer = await this.playerModel.findByIdAndDelete(id).exec();

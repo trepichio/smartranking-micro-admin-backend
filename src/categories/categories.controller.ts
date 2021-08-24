@@ -7,7 +7,7 @@ import {
   RmqContext,
 } from '@nestjs/microservices';
 import { CategoriesService } from './categories.service';
-import { CategoryInterface } from './interfaces/category.interface';
+import { ICategory } from './interfaces/category.interface';
 
 const ackErrors: string[] = ['E11000'];
 
@@ -19,7 +19,7 @@ export class CategoriesController {
 
   @EventPattern('create-category')
   async createCategory(
-    @Payload() category: CategoryInterface,
+    @Payload() category: ICategory,
     @Ctx() context: RmqContext,
   ) {
     this.logger.log(`Category: ${JSON.stringify(category, null, 2)}`);
@@ -59,7 +59,7 @@ export class CategoriesController {
 
   @EventPattern('update-category')
   async updateCategory(
-    @Payload() { id, dto }: { id: string; dto: CategoryInterface },
+    @Payload() { id, dto }: { id: string; dto: ICategory },
     @Ctx() context: RmqContext,
   ) {
     this.logger.log(`Update Category: ${JSON.stringify(dto, null, 2)}`);

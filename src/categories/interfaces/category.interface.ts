@@ -1,14 +1,14 @@
 import { Document } from 'mongoose';
-import { PlayerInterface } from 'src/players/interfaces/player.interface';
+import { IPlayer } from 'src/players/interfaces/player.interface';
 
-export interface CategoryInterface extends Document {
+export interface ICategory extends Document {
   readonly category: string;
   description: string;
-  events: Array<EventInterface>;
-  players: Array<PlayerInterface>;
+  events: Array<IEvent>;
+  players: Array<IPlayer>;
 }
 
-export interface EventInterface {
+export interface IEvent {
   name: string;
   operation: string;
   value: number;
