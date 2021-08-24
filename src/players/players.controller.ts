@@ -52,7 +52,7 @@ export class PlayersController {
     @Ctx() context: RmqContext,
   ) {
     this.logger.log(`updatePlayer ${JSON.stringify(id)}`);
-    this.logger.log(`with data:${JSON.stringify(dto)}`);
+    this.logger.log(`with data:${JSON.stringify(dto, null, 2)}`);
 
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();

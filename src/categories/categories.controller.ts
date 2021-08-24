@@ -22,7 +22,7 @@ export class CategoriesController {
     @Payload() category: CategoryInterface,
     @Ctx() context: RmqContext,
   ) {
-    this.logger.log(`Category: ${JSON.stringify(category)}`);
+    this.logger.log(`Category: ${JSON.stringify(category, null, 2)}`);
 
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
@@ -62,7 +62,7 @@ export class CategoriesController {
     @Payload() { id, dto }: { id: string; dto: CategoryInterface },
     @Ctx() context: RmqContext,
   ) {
-    this.logger.log(`Update Category: ${JSON.stringify(dto)}`);
+    this.logger.log(`Update Category: ${JSON.stringify(dto, null, 2)}`);
 
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();

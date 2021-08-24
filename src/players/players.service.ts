@@ -117,7 +117,7 @@ export class PlayersService {
       throw new Error(`_E404: Player with email ${query.email} not found`);
     }
 
-    this.logger.log(`player: ${JSON.stringify(player)}`);
+    this.logger.log(`player: ${JSON.stringify(player, null, 2)}`);
     return player;
   }
 
@@ -130,7 +130,7 @@ export class PlayersService {
       throw new Error(`_E404: Player with id ${id} not found`);
     }
 
-    this.logger.log(`player: ${JSON.stringify(player)}`);
+    this.logger.log(`player: ${JSON.stringify(player, null, 2)}`);
     return player;
   }
 
