@@ -116,7 +116,7 @@ export class PlayersService {
   }
 
   private async findOneById(id): Promise<IPlayer> {
-    const player = await await this.playerModel.findById(id).exec();
+    const player = this.playerModel.findById(id).exec();
 
     if (!player) {
       throw new Error(`_E404: Player with id ${id} not found`);
